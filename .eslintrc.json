@@ -1,3 +1,107 @@
 {
-  "extends": "next/core-web-vitals"
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "project": ["tsconfig.json"],
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "import",
+    "unused-imports",
+    "react",
+    "react-hooks"
+  ],
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended"
+  ],
+  "rules": {
+    // Do with TypeScript
+    "no-undef": "off",
+
+    // https://github.com/typescript-eslint/typescript-eslint/issues/2063#issuecomment-675156492
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "extendDefaults": true,
+        "types": {
+          "{}": false
+        }
+      }
+    ],
+    "@typescript-eslint/naming-convention": [
+      "warn",
+      {
+        "selector": "function",
+        "format": ["PascalCase", "camelCase"]
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    // "@typescript-eslint/prefer-readonly-parameter-types": ["error"],
+
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "next/link",
+            "message": "Use ui/Link"
+          },
+
+          {
+            "name": "next/head",
+            "message": "Use components/Head"
+          }
+        ]
+      }
+    ],
+
+    "@typescript-eslint/semi": "warn",
+
+    "no-useless-rename": "error",
+    "object-shorthand": "error",
+
+    // "import/order": "off",
+    "import/no-unresolved": "off",
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+
+    "curly": "warn",
+    "eqeqeq": "warn",
+    "no-throw-literal": "warn",
+    "semi": "off",
+
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "error",
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+
+    "@next/next/no-img-element": "off"
+  },
+  "ignorePatterns": ["out", "dist", "**/*.d.ts"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
 }
