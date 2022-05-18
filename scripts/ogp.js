@@ -12,7 +12,7 @@ const sleep = (ms) =>
 
 (async () => {
   const browser = await playwright.chromium.launch();
-  const cp = exec("next start");
+  const cp = exec(path.join(__dirname, "../node_modules/.bin/next"));
 
   const fs = await readdir(path.join(__dirname, "../out/sketches"));
   for (const f of fs) {
