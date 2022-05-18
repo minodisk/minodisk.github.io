@@ -6,11 +6,13 @@ export const useSketch = ({
   noLoop,
   width,
   height,
+  setup,
   draw,
 }: ReadonlyDeep<{
   noLoop: boolean;
   width: number;
   height: number;
+  setup?: (p: p5) => unknown;
   draw: (p: p5) => unknown;
 }>) => {
   const sketch = useCallback(
@@ -23,6 +25,9 @@ export const useSketch = ({
           canvas.mouseOver(() => p.loop());
           canvas.mouseOut(() => p.noLoop());
         }
+        if (setup) {
+          setup(p);
+        }
       };
 
       if (draw) {
@@ -31,7 +36,7 @@ export const useSketch = ({
         };
       }
     },
-    [draw, height, noLoop, width]
+    [draw, height, noLoop, setup, width]
   );
 
   return sketch;

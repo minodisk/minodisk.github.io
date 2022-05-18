@@ -70,11 +70,6 @@ export const Flex: PFC<FlexProps> = ({
   />
 );
 
-export type VBetweenProps = Omit<FlexProps, "direction" | "justify">;
-export const VBetween: PFC<VBetweenProps> = (props) => (
-  <Flex direction="row" justify="between" {...props} />
-);
-
 export type CenterProps = BoxProps & ReadonlyDeep<{ gap?: number }>;
 export const Center: PFC<CenterProps> = ({ gap, ...props }) => (
   <Box
@@ -88,25 +83,41 @@ export const Center: PFC<CenterProps> = ({ gap, ...props }) => (
 );
 
 export type StackProps = Omit<FlexProps, "justify">;
-export const Stack: PFC<StackProps> = (props) => <Flex {...props} />;
-
-export type VStackProps = Omit<StackProps, "direction">;
-export const VStack: PFC<VStackProps> = (props) => (
-  <Stack direction="row" {...props} />
+export const Stack: PFC<StackProps> = (props) => (
+  <Flex justify="start" {...props} />
 );
 
 export type HStackProps = Omit<StackProps, "direction">;
 export const HStack: PFC<HStackProps> = (props) => (
+  <Stack direction="row" {...props} />
+);
+
+export type VStackProps = Omit<StackProps, "direction">;
+export const VStack: PFC<VStackProps> = (props) => (
   <Stack direction="column" {...props} />
 );
 
-export type GridProps = BoxProps & ReadonlyDeep<{ gap?: number }>;
-export const Grid: PFC<GridProps> = ({ gap, ...props }) => (
+export type BetweenProps = Omit<FlexProps, "justify">;
+export const Between: PFC<BetweenProps> = (props) => (
+  <Flex justify="between" {...props} />
+);
+
+export type HBetweenProps = Omit<BetweenProps, "direction">;
+export const HBetween: PFC<HBetweenProps> = (props) => (
+  <Between direction="row" {...props} />
+);
+
+export type VBetweenProps = Omit<BetweenProps, "direction">;
+export const VBetween: PFC<VBetweenProps> = (props) => (
+  <Between direction="column" {...props} />
+);
+
+export type GridProps = BoxProps & ReadonlyDeep<{ columnWidth: number }>;
+export const Grid: PFC<GridProps> = ({ columnWidth, ...props }) => (
   <Box
     css={{
       display: "grid",
-      gridTemplateColumns: `repeat(auto-fill, 200px)`,
-      gap: gap ? 2 ** gap : undefined,
+      gridTemplateColumns: `repeat(auto-fill, ${columnWidth}px)`,
     }}
     {...props}
   />
@@ -136,7 +147,6 @@ export const Text: PFC<TextProps> = ({ px, py, align, ...props }) => (
       paddingTop: py ? 2 ** py : undefined,
       paddingBottom: py ? 2 ** py : undefined,
       color: "rgb(100,100,100)",
-      fontSize: 10,
       textAlign: align,
     }}
     {...props}
@@ -179,15 +189,42 @@ export const Button: PFC<ButtonProps> = ({
 };
 
 export type LinkProps = NextLinkProps & {};
-export const Link: PFC<NextLinkProps> = ({ children, className, ...props }) => {
+export const Link: PFC<NextLinkProps> = ({
+  className,
+  href,
+  children,
+  ...props
+}) => {
+  const h = href.toString();
+  if (h.startsWith("http")) {
+    return (
+      <a
+        className={className}
+        target="_blank"
+        href={h}
+        css={{
+          color: "white",
+          cursor: "pointer",
+          textDecoration: "none",
+          position: "relative",
+          "::after": {
+            content: "'_'",
+          },
+        }}
+        rel="noreferrer"
+      >
+        {children}
+      </a>
+    );
+  }
   return (
-    <NextLink {...props}>
+    <NextLink href={href} {...props}>
       <a
         className={className}
         css={{
           color: "white",
           cursor: "pointer",
-          textDecoration: "underline",
+          textDecoration: "none",
         }}
       >
         {children}

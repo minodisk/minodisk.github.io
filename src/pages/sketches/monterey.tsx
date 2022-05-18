@@ -1,40 +1,44 @@
 import { NextPage } from "next";
 import p5, { Color, Graphics } from "p5";
 import { ReadonlyDeep } from "type-fest";
-import P5 from "../../components/P5";
 import SketchPage from "../../components/SketchPage";
 import { useSketch } from "../../hooks/sketch";
 
 export const usePage = ({
   noLoop = false,
-  width = 400,
-  height = 400,
+  width = 900,
+  height = 600,
 }: ReadonlyDeep<{
   noLoop?: boolean;
   width?: number;
   height?: number;
 }>): Readonly<{
-  key: string;
+  slug: string;
   title: string;
+  width: number;
+  height: number;
   sketch: (p: p5) => unknown;
 }> => {
   const graphics: Array<Graphics> = [];
 
   return {
-    key: "monterey",
+    slug: "monterey",
     title: "Monterey",
+    width,
+    height,
     sketch: useSketch({
       noLoop,
       width,
       height,
       draw: (p: p5) => {
-        const dx = 4;
-        const dy = 50;
-        const radius = 600;
+        const lx = 8;
+        const ly = 5;
+        const dx = width / lx;
+        const dy = height / ly;
+        const radius = height;
         const t = p.frameCount * 16;
 
         p.background(0);
-        // p.noStroke();
 
         const topColorStart = p.color("#712175");
         const topColorEnd = p.color("#11032b");
@@ -114,13 +118,6 @@ function gradient(
   }
 }
 
-const Page: NextPage = () => {
-  const { title, sketch } = usePage({});
-  return (
-    <SketchPage title={title}>
-      <P5 sketch={sketch} />
-    </SketchPage>
-  );
-};
+const Page: NextPage = () => <SketchPage usePage={usePage} />;
 
 export default Page;

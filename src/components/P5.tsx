@@ -1,14 +1,50 @@
 /** @jsxImportSource @emotion/react */
-import dynamic from "next/dynamic";
-import { FC } from "react";
-import { P5RawProps } from "./P5Raw";
+import type p5 from "p5";
+import { FC, useEffect, useRef } from "react";
+import { ReadonlyDeep } from "type-fest";
 
-const P5Raw = dynamic(() => import("./P5Raw"), { ssr: false });
+export type P5Props = ReadonlyDeep<{
+  sketch: (p: p5) => unknown;
+  dispose?: () => unknown;
+}>;
 
-export type P5Props = P5RawProps;
+let P5Constructor: any;
 
-const P5: FC<P5Props> = ({ sketch }) => {
-  return <P5Raw sketch={sketch} />;
+const P5: FC<P5Props> = ({ sketch, dispose }) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      // Don't run in SSR.
+      return;
+    }
+    if (!P5Constructor) {
+      P5Constructor = require("p5");
+    }
+    const instance = new P5Constructor(sketch, ref.current);
+    return () => {
+      if (dispose) {
+        dispose();
+      }
+      instance.setup = instance.draw = null;
+      instance.noLoop();
+      instance.remove();
+      window.cancelAnimationFrame(instance._requestAnimId);
+      instance._setup = () => {
+        instance.remove();
+        window.cancelAnimationFrame(instance._requestAnimId);
+        instance._setup = null;
+      };
+      instance._draw = () => {
+        instance.remove();
+        window.cancelAnimationFrame(instance._requestAnimId);
+        instance._setup = null;
+        instance._draw = null;
+      };
+    };
+  }, [dispose, sketch]);
+
+  return <div ref={ref} />;
 };
 
 export default P5;

@@ -1,4 +1,4 @@
-import { Box, PFC, Text } from "./ui";
+import { Box, Link, PFC, Text } from "./ui";
 
 const Footer: PFC = () => (
   <footer
@@ -9,8 +9,10 @@ const Footer: PFC = () => (
       background: "black",
     }}
   >
-    <Box px={4} py={2}>
-      <Text>@minodisk</Text>
+    <Box py={4}>
+      <Link href="/bio">
+        <Text>@</Text>
+      </Link>
     </Box>
   </footer>
 );

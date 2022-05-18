@@ -5,9 +5,10 @@
   "scripts": {
     "dev": "run-p dev:*",
     "dev:next": "next dev",
-    "build": "run-s build:next build:export",
+    "build": "run-s build:next build:export build:ogp",
     "build:next": "next build",
     "build:export": "next export",
+    "build:ogp": "node ./scripts/ogp.js",
     "lint": "next lint",
     "lint:fix": "npm run lint -- --fix",
     "type": "tsc"
@@ -15,6 +16,7 @@
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "next": "12.1.6",
+    "next-seo": "^5.4.0",
     "p5": "^1.4.1",
     "react": "18.1.0",
     "react-dom": "18.1.0",
@@ -32,6 +34,9 @@
     "eslint-config-next": "12.1.6",
     "eslint-plugin-unused-imports": "^2.0.0",
     "npm-run-all": "^4.1.5",
+    "playwright": "^1.21.1",
+    "sharp": "^0.30.4",
+    "ts-node": "^10.7.0",
     "typescript": "4.6.4"
   }
 }

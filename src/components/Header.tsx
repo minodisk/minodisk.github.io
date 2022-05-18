@@ -1,6 +1,10 @@
-import { Box, H1, Link, PFC, VBetween } from "./ui";
+import { H1, Link, PFC, HBetween } from "./ui";
 
-const Header: PFC = ({ children }) => (
+export type HeaderProps = {
+  title?: string;
+};
+
+const Header: PFC<HeaderProps> = ({ title, children }) => (
   <header
     css={{
       position: "sticky",
@@ -9,12 +13,25 @@ const Header: PFC = ({ children }) => (
       background: "black",
     }}
   >
-    <VBetween px={4} py={4}>
+    <HBetween py={4} align="end">
       <Link href="/" css={{ textDecoration: "none" }}>
-        <H1>Sketches</H1>
+        <H1>
+          <span>Sketches</span>
+          {title ? (
+            <span
+              css={{
+                "::before": {
+                  content: "'::'",
+                },
+              }}
+            >
+              {title}
+            </span>
+          ) : null}
+        </H1>
       </Link>
-      <Box>{children}</Box>
-    </VBetween>
+      {children}
+    </HBetween>
   </header>
 );
 

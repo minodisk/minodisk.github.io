@@ -1,31 +1,34 @@
 import type { NextPage } from "next";
+import { NextSeo } from "next-seo";
 import Footer from "../components/Footer";
-import Head from "../components/Head";
 import Header from "../components/Header";
+import Layout from "../components/Layout";
 import P5 from "../components/P5";
+import { SketchPage } from "../components/SketchPage";
 import { Box, Grid, Link, PFC, Text } from "../components/ui";
+import * as Indepdep from "./sketches/indepdep";
 import * as Monterey from "./sketches/monterey";
 import * as Satin from "./sketches/satin";
 import * as Virus from "./sketches/virus";
 import * as Wave from "./sketches/wave";
 
+const width = 224;
+const height = width;
+
 const Home: NextPage = () => {
-  const pages = [
-    Monterey.usePage({ noLoop: true, width: 200, height: 200 }),
-    Satin.usePage({ noLoop: true, width: 200, height: 200 }),
-    Virus.usePage({ noLoop: true, width: 200, height: 200 }),
-    Wave.usePage({ noLoop: true, width: 200, height: 200 }),
-  ];
+  const pages: SketchPage[] = [Indepdep, Monterey, Satin, Virus, Wave].map(
+    (page) => page.usePage({ noLoop: true, width, height })
+  );
   return (
-    <>
-      <Head />
+    <Layout>
+      <NextSeo />
       <Header />
       <main>
-        <Grid px={4} gap={4}>
-          {pages.map(({ key, title, sketch }) => (
-            <Link href={`/sketches/${key}`} key={key}>
-              <Box width={200} height={200}>
-                <P5 sketch={sketch} />
+        <Grid gap={4} columnWidth={width}>
+          {pages.map(({ slug, title, sketch, dispose }) => (
+            <Link href={`/sketches/${slug}`} key={slug}>
+              <Box width={width} height={height}>
+                <P5 sketch={sketch} dispose={dispose} />
                 <Label>{title}</Label>
               </Box>
             </Link>
@@ -33,7 +36,7 @@ const Home: NextPage = () => {
         </Grid>
       </main>
       <Footer />
-    </>
+    </Layout>
   );
 };
 
