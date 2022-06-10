@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import type p5 from "p5";
-import { FC, useEffect, useRef } from "react";
+import { FC, memo, useEffect, useRef } from "react";
 import { ReadonlyDeep } from "type-fest";
 
 export type P5Props = ReadonlyDeep<{
@@ -47,4 +47,4 @@ const P5: FC<P5Props> = ({ sketch, dispose }) => {
   return <div ref={ref} />;
 };
 
-export default P5;
+export default memo(P5);

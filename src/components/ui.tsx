@@ -196,11 +196,11 @@ export const Link: PFC<NextLinkProps> = ({
   ...props
 }) => {
   const h = href.toString();
-  if (h.startsWith("http")) {
+  // if (h.startsWith("http")) {
     return (
       <a
         className={className}
-        target="_blank"
+        target={h.startsWith('http')?"_blank":undefined}
         href={h}
         css={{
           color: "white",
@@ -216,21 +216,21 @@ export const Link: PFC<NextLinkProps> = ({
         {children}
       </a>
     );
-  }
-  return (
-    <NextLink href={href} {...props}>
-      <a
-        className={className}
-        css={{
-          color: "white",
-          cursor: "pointer",
-          textDecoration: "none",
-        }}
-      >
-        {children}
-      </a>
-    </NextLink>
-  );
+  // }
+  // return (
+  //   <NextLink href={href} {...props}>
+  //     <a
+  //       className={className}
+  //       css={{
+  //         color: "white",
+  //         cursor: "pointer",
+  //         textDecoration: "none",
+  //       }}
+  //     >
+  //       {children}
+  //     </a>
+  //   </NextLink>
+  // );
 };
 
 export type IconButtonProps = ButtonProps;
